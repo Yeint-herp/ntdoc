@@ -1,0 +1,68 @@
+[
+  {
+    "category": "NT",
+    "type": "Function",
+    "name": "NtCreateFile",
+    "return_type": "NTSTATUS",
+    "parameters": [
+      "PHANDLE FileHandle",
+      "ACCESS_MASK DesiredAccess",
+      "POBJECT_ATTRIBUTES ObjectAttributes"
+    ],
+    "description": "Creates or opens a file object."
+  },
+  {
+    "category": "Win32",
+    "type": "Function",
+    "name": "CreateFileW",
+    "return_type": "HANDLE",
+    "parameters": [
+      "LPCWSTR lpFileName",
+      "DWORD dwDesiredAccess",
+      "DWORD dwShareMode"
+    ],
+    "description": "Creates or opens a file or I/O device."
+  },
+  {
+    "category": "NT",
+    "type": "Struct",
+    "name": "OBJECT_ATTRIBUTES",
+    "fields": [
+      { "name": "Length", "type": "ULONG" },
+      { "name": "RootDirectory", "type": "HANDLE" },
+      { "name": "ObjectName", "type": "PUNICODE_STRING" }
+    ]
+  },
+  {
+    "category": "Win32",
+    "type": "Enum",
+    "name": "FILE_ATTRIBUTE",
+    "fields": [
+      { "name": "FILE_ATTRIBUTE_READONLY", "init": 1 },
+      { "name": "FILE_ATTRIBUTE_HIDDEN", "init": 2 },
+      { "name": "FILE_ATTRIBUTE_SYSTEM", "init": 4 }
+    ]
+  },
+  {
+    "category": "NT",
+    "type": "Union",
+    "name": "LARGE_INTEGER",
+    "fields": [
+      { "name": "LowPart", "type": "DWORD" },
+      { "name": "HighPart", "type": "LONG" }
+    ]
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "INVALID_HANDLE_VALUE",
+    "value": "(HANDLE)(LONG_PTR)-1"
+  },
+  {
+    "category": "NT",
+    "type": "Typedef",
+    "name": "PUNICODE_STRING",
+    "typedef": ["UNICODE_STRING*"]
+  }
+]
+
