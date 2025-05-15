@@ -1,68 +1,1053 @@
 [
   {
     "category": "NT",
-    "type": "Function",
-    "name": "NtCreateFile",
-    "return_type": "NTSTATUS",
-    "parameters": [
-      "PHANDLE FileHandle",
-      "ACCESS_MASK DesiredAccess",
-      "POBJECT_ATTRIBUTES ObjectAttributes"
-    ],
-    "description": "Creates or opens a file object."
-  },
-  {
-    "category": "Win32",
-    "type": "Function",
-    "name": "CreateFileW",
-    "return_type": "HANDLE",
-    "parameters": [
-      "LPCWSTR lpFileName",
-      "DWORD dwDesiredAccess",
-      "DWORD dwShareMode"
-    ],
-    "description": "Creates or opens a file or I/O device."
+    "type": "Define",
+    "name": "NT_SUCCESS(Status)",
+    "value": "(((NTSTATUS)(Status)) >= 0)"
   },
   {
     "category": "NT",
-    "type": "Struct",
-    "name": "OBJECT_ATTRIBUTES",
-    "fields": [
-      { "name": "Length", "type": "ULONG" },
-      { "name": "RootDirectory", "type": "HANDLE" },
-      { "name": "ObjectName", "type": "PUNICODE_STRING" }
-    ]
-  },
-  {
-    "category": "Win32",
-    "type": "Enum",
-    "name": "FILE_ATTRIBUTE",
-    "fields": [
-      { "name": "FILE_ATTRIBUTE_READONLY", "init": 1 },
-      { "name": "FILE_ATTRIBUTE_HIDDEN", "init": 2 },
-      { "name": "FILE_ATTRIBUTE_SYSTEM", "init": 4 }
-    ]
+    "type": "Define",
+    "name": "NtCurrentProcess()",
+    "value": "((HANDLE)(LONG_PTR)-1)"
   },
   {
     "category": "NT",
-    "type": "Union",
-    "name": "LARGE_INTEGER",
-    "fields": [
-      { "name": "LowPart", "type": "DWORD" },
-      { "name": "HighPart", "type": "LONG" }
-    ]
+    "type": "Define",
+    "name": "NtCurrentThread()",
+    "value": "((HANDLE)(LONG_PTR)-2)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "ZwCurrentProcess()",
+    "value": "NtCurrentProcess()"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "ZwCurrentThread()",
+    "value": "NtCurrentThread()"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "InitializeObjectAttributes( p, n, a, r, s )",
+    "value": "{ (p)->Length = sizeof(OBJECT_ATTRIBUTES); (p)->RootDirectory = r; (p)->Attributes = a; (p)->ObjectName = n; (p)->SecurityDescriptor = s; (p)->SecurityQualityOfService = nullptr; }"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "OBJ_KERNEL_HANDLE",
+    "value": "0x00000200L"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "OBJ_CASE_INSENSITIVE",
+    "value": "0x00000040L"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "OBJ_NAME_PATH_SEPARATOR",
+    "value": "((WCHAR)L'\\\\')"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "TAG_USTR",
+    "value": "'RTSU'"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL",
+    "value": "1"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "RTL_IMAGE_NT_HEADER_EX_FLAG_NO_RANGE_CHECK",
+    "value": "0x00000001"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "NTSYSAPI",
+    "value": "__declspec(dllimport)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "UNICODE_STRING_MAX_BYTES",
+    "value": "((USHORT) 65534)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "HEAP_ENTRY_BUSY",
+    "value": "0x01"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "HEAP_ENTRY_EXTRA_PRESENT",
+    "value": "0x02"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "HEAP_ENTRY_FILL_PATTERN",
+    "value": "0x04"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "HEAP_ENTRY_VIRTUAL_ALLOC",
+    "value": "0x08"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "HEAP_ENTRY_LAST_ENTRY",
+    "value": "0x10"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_PROCESS_ATTACH_CALLED",
+    "value": "0x00080000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_ENTRY_PROCESSED",
+    "value": "0x00004000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_IMAGE_DLL",
+    "value": "0x00000004"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_LOAD_IN_PROGRESS",
+    "value": "0x00001000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_UNLOAD_IN_PROGRESS",
+    "value": "0x00002000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_UPDATE_REFCOUNT",
+    "value": "0x01"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_UPDATE_DEREFCOUNT",
+    "value": "0x02"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_UPDATE_PIN",
+    "value": "0x03"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "LDRP_COR_IMAGE",
+    "value": "0x00400000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SECTION_MAP_READ",
+    "value": "4"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SECTION_MAP_WRITE",
+    "value": "0x0002"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SECTION_MAP_EXECUTE",
+    "value": "0x0008"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_COMMIT",
+    "value": "0x00001000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_RESERVE",
+    "value": "0x00002000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_RESET",
+    "value": "0x00080000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_RESET_UNDO",
+    "value": "0x1000000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_LARGE_PAGES",
+    "value": "0x20000000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_PHYSICAL",
+    "value": "0x00400000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_TOP_DOWN",
+    "value": "0x00100000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_WRITE_WATCH",
+    "value": "0x00200000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_DECOMMIT",
+    "value": "0x00004000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_RELEASE",
+    "value": "0x00008000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_COALESCE_PLACEHOLDERS",
+    "value": "0x00000001"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "MEM_PRESERVE_PLACEHOLDER",
+    "value": "0x00000002"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_NONCONTINUABLE",
+    "value": "0x1"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_UNWINDING",
+    "value": "0x2"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_EXIT_UNWIND",
+    "value": "0x4"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_STACK_INVALID",
+    "value": "0x8"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_NESTED_CALL",
+    "value": "0x10"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_TARGET_UNWIND",
+    "value": "0x20"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_COLLIDED_UNWIND",
+    "value": "0x40"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_SOFTWARE_EXCEPTION",
+    "value": "0xE0000000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_ACCESS_VIOLATION",
+    "value": "0xC0000005"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_ARRAY_BOUNDS_EXCEEDED",
+    "value": "0xC000008C"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_BREAKPOINT",
+    "value": "0x80000003"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_DATATYPE_MISALIGNMENT",
+    "value": "0x80000002"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_DENORMAL_OPERAND",
+    "value": "0xC000008D"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_DIVIDE_BY_ZERO",
+    "value": "0xC000008E"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_INEXACT_RESULT",
+    "value": "0xC000008F"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_INVALID_OPERATION",
+    "value": "0xC0000090"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_OVERFLOW",
+    "value": "0xC0000091"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_STACK_CHECK",
+    "value": "0xC0000092"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_FLT_UNDERFLOW",
+    "value": "0xC0000093"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_ILLEGAL_INSTRUCTION",
+    "value": "0xC000001D"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_IN_PAGE_ERROR",
+    "value": "0xC0000006"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_INT_DIVIDE_BY_ZERO",
+    "value": "0xC0000094"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_INT_OVERFLOW",
+    "value": "0xC0000095"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_INVALID_DISPOSITION",
+    "value": "0xC0000026"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_NONCONTINUABLE_EXCEPTION",
+    "value": "0xC0000025"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_PRIV_INSTRUCTION",
+    "value": "0xC0000096"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_SINGLE_STEP",
+    "value": "0x80000004"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "EXCEPTION_STACK_OVERFLOW",
+    "value": "0xC00000FD"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STANDARD_RIGHTS_READ",
+    "value": "0x00020000"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SYNCHRONIZE",
+    "value": "(0x00100000L)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_READ_DATA",
+    "value": "0x00000001"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_LIST_DIRECTORY",
+    "value": "0x00000001"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_READ_ATTRIBUTES",
+    "value": "0x00000080"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_READ_EA",
+    "value": "0x00000008"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_GENERIC_READ",
+    "value": "(STANDARD_RIGHTS_READ | FILE_READ_DATA | FILE_READ_ATTRIBUTES | FILE_READ_EA | SYNCHRONIZE)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_EXECUTE",
+    "value": "(0x0020)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_NON_DIRECTORY_FILE",
+    "value": "0x00000040"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "FILE_SYNCHRONOUS_IO_NONALERT",
+    "value": "0x00000020"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_NAME_TOO_LONG",
+    "value": "((NTSTATUS)0xC0000106)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_BUFFER_OVERFLOW",
+    "value": "((NTSTATUS)0x80000005)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_INVALID_PARAMETER",
+    "value": "((NTSTATUS)0xC000000DL)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_OBJECT_PATH_SYNTAX_BAD",
+    "value": "((NTSTATUS)0xC000003B)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_INVALID_IMAGE_FORMAT",
+    "value": "((NTSTATUS)0xC000007B)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_NO_MEMORY",
+    "value": "((NTSTATUS)(0xC0000017L))"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_ORDINAL_NOT_FOUND",
+    "value": "((NTSTATUS)0xC0000138)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_ENTRYPOINT_NOT_FOUND",
+    "value": "((NTSTATUS)0xC0000139)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_DLL_NOT_FOUND",
+    "value": "((NTSTATUS)0xC0000135)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_PROCEDURE_NOT_FOUND",
+    "value": "((NTSTATUS)0xC000007A)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_SXS_KEY_NOT_FOUND",
+    "value": "((NTSTATUS)0xC0150008)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_ACCESS_VIOLATION",
+    "value": "((NTSTATUS)0xC0000005)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_DLL_INIT_FAILED",
+    "value": "((NTSTATUS)0xC0000142)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_SHARING_VIOLATION",
+    "value": "((NTSTATUS)0xC0000043L)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_ACCESS_DENIED",
+    "value": "((NTSTATUS)0xC0000022L)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_SXS_SECTION_NOT_FOUND",
+    "value": "((NTSTATUS)0xC0150006)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "STATUS_OBJECT_NAME_NOT_FOUND",
+    "value": "((NTSTATUS)0xC0000034L)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SWAPD(x)",
+    "value": "x"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SWAPW(x)",
+    "value": "x"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SD(Object,Field)",
+    "value": "Object->Field = SWAPD(Object->Field)"
+  },
+  {
+    "category": "NT",
+    "type": "Define",
+    "name": "SW(Object,Field)",
+    "value": "Object->Field = SWAPW(Object->Field)"
   },
   {
     "category": "Win32",
     "type": "Define",
-    "name": "INVALID_HANDLE_VALUE",
-    "value": "(HANDLE)(LONG_PTR)-1"
+    "name": "_In_",
+    "value": ""
   },
   {
-    "category": "NT",
-    "type": "Typedef",
-    "name": "PUNICODE_STRING",
-    "typedef": ["UNICODE_STRING*"]
+    "category": "Win32",
+    "type": "Define",
+    "name": "_Inout_",
+    "value": ""
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_In_opt_",
+    "value": ""
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_Out_",
+    "value": ""
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_Out_opt_",
+    "value": ""
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GDI_BATCH_BUFFER_SIZE",
+    "value": "310"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GDI_HANDLE_BUFFER_SIZE32",
+    "value": "34"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GDI_HANDLE_BUFFER_SIZE",
+    "value": "GDI_HANDLE_BUFFER_SIZE32"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "MAX_PATH",
+    "value": "260"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "STATIC_UNICODE_BUFFER_LENGTH",
+    "value": "261"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WIN32_CLIENT_INFO_LENGTH",
+    "value": "62"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TLS_MINIMUM_AVAILABLE",
+    "value": "64"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "PROCESSOR_FEATURE_MAX",
+    "value": "64"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "RTL_MAX_DRIVE_LETTERS",
+    "value": "32"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "RESTART_MAX_CMD_LINE",
+    "value": "1024"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "ANYSIZE_ARRAY",
+    "value": "1"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "UNICODE_NULL",
+    "value": "L'\\0'"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "ANSI_NULL",
+    "value": "'\\0'"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "IMAGE_DOS_SIGNATURE",
+    "value": "0x5A4D"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "IMAGE_NT_SIGNATURE",
+    "value": "0x00004550"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "IMAGE_DIRECTORY_ENTRY_EXPORT",
+    "value": "0"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG",
+    "value": "10"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "ACTIVATION_CONTEXT_SECTION_DLL_REDIRECTION",
+    "value": "2"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_OVERLAPPED",
+    "value": "0x00000000L"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_CAPTION",
+    "value": "0x00C00000L"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_SYSMENU",
+    "value": "0x00080000L"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_THICKFRAME",
+    "value": "0x00040000L"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_MINIMIZEBOX",
+    "value": "0x00020000L"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_MAXIMIZEBOX",
+    "value": "0x00010000L"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WS_OVERLAPPEDWINDOW",
+    "value": "(WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WM_DESTROY",
+    "value": "0x0002"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "WM_PAINT",
+    "value": "0x000F"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_ASSIGN_PRIMARY",
+    "value": "(0x0001)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_DUPLICATE",
+    "value": "(0x0002)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_IMPERSONATE",
+    "value": "(0x0004)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_QUERY",
+    "value": "(0x0008)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_QUERY_SOURCE",
+    "value": "(0x0010)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_ADJUST_PRIVILEGES",
+    "value": "(0x0020)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_ADJUST_GROUPS",
+    "value": "(0x0040)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_ADJUST_DEFAULT",
+    "value": "(0x0080)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_ADJUST_SESSIONID",
+    "value": "(0x0100)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "TOKEN_ALL_ACCESS_P",
+    "value": "(STANDARD_RIGHTS_REQUIRED | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_QUERY_SOURCE | TOKEN_ADJUST_PRIVILEGES | TOKEN_ADJUST_GROUPS | TOKEN_ADJUST_DEFAULT)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "FILE_SHARE_READ",
+    "value": "0x00000001"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "FILE_SHARE_WRITE",
+    "value": "0x00000002"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "FILE_SHARE_DELETE",
+    "value": "0x00000004"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GENERIC_READ",
+    "value": "0x80000000"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GENERIC_WRITE",
+    "value": "0x40000000"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GENERIC_EXECUTE",
+    "value": "0x20000000"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "GENERIC_ALL",
+    "value": "0x10000000"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "REG_SZ",
+    "value": "1"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "REG_DWORD",
+    "value": "4"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "REG_QWORD",
+    "value": "11"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "DLL_PROCESS_ATTACH",
+    "value": "1"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "DLL_PROCESS_DETACH",
+    "value": "0"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "DLL_THREAD_ATTACH",
+    "value": "2"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "DLL_THREAD_DETACH",
+    "value": "3"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "USHRT_MAX",
+    "value": "0xffff"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "MAXUSHORT",
+    "value": "(ULONG_PTR)USHRT_MAX"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "MAXIMUM_LEADBYTES",
+    "value": "12"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "DEFAULT_SECURITY_COOKIE",
+    "value": "0xBB40E64E"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_VISTA",
+    "value": "0x0600"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_WIN2K",
+    "value": "0x0500"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_WIN6",
+    "value": "0x0600"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_WIN7",
+    "value": "0x0601"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_WIN8",
+    "value": "0x0602"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_WINBLUE",
+    "value": "0x0603"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "_WIN32_WINNT_WIN10",
+    "value": "0x0A00"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "APISET_WIN7",
+    "value": "(1 << 0)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "APISET_WIN8",
+    "value": "(1 << 1)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "APISET_WIN81",
+    "value": "(1 << 2)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "APISET_WIN10",
+    "value": "(1 << 3)"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "IMAGE_ORDINAL_FLAG32",
+    "value": "0x80000000"
+  },
+  {
+    "category": "Win32",
+    "type": "Define",
+    "name": "IMAGE_ORDINAL_FLAG64",
+    "value": "0x8000000000000000ULL"
   }
 ]
 
