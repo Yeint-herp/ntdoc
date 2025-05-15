@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+use fuzzy_matcher::skim::SkimMatcherV2;
+use fuzzy_matcher::FuzzyMatcher;
 use std::fmt;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -190,6 +192,68 @@ pub fn database_parse() -> Vec<CategorizedEntry> {
 impl fmt::Display for CategorizedEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.pretty_definition(&[]))
+    }
+}
+
+impl CategorizedEntry {
+        pub fn fuzzy_score(&self, query: &str, matcher: &SkimMatcherV2) -> Option<i64> {
+        if let Some(score) = matcher.fuzzy_match(self.name(), query) {
+            return Some(score + 1000);
+        }
+
+        let mut best = None;
+        match &self.entry {
+            Entry::Define { value, .. } => {
+                best = best.max(matcher.fuzzy_match(value, query));
+            }
+            Entry::Function { description, .. } => {
+                best = best.max(matcher.fuzzy_match(description, query));
+            }
+            Entry::Struct { fields, .. } | Entry::Union { fields, .. } => {
+                for f in fields {
+                    best = best.max(matcher.fuzzy_match(&f.name, query));
+                }
+            }
+            Entry::Enum { fields, .. } => {
+                for f in fields {
+                    best = best.max(matcher.fuzzy_match(&f.name, query));
+                }
+            }
+            _ => {}
+        }
+
+        best
+    }
+
+    pub fn fuzzy_score_ci(&self, query: &str, matcher: &SkimMatcherV2) -> Option<i64> {
+        let mut best = matcher.fuzzy_match(&self.name().to_lowercase(), &query.to_lowercase());
+
+        match best {
+            Some(x) => Some(x),
+            None => {
+                match &self.entry {
+                    Entry::Define { value, .. } => {
+                        best = best.max(matcher.fuzzy_match(&value.to_lowercase(), &query.to_lowercase()));
+                    }
+                    Entry::Function { description, .. } => {
+                        best = best.max(matcher.fuzzy_match(&description.to_lowercase(), &query.to_lowercase()));
+                    }
+                    Entry::Struct { fields, .. } | Entry::Union { fields, .. } => {
+                        for f in fields {
+                            best = best.max(matcher.fuzzy_match(&f.name.to_lowercase(), &query.to_lowercase()));
+                        }
+                    }
+                    Entry::Enum { fields, .. } => {
+                        for f in fields {
+                            best = best.max(matcher.fuzzy_match(&f.name.to_lowercase(), &query.to_lowercase()));
+                        }
+                    }
+                    _ => {}
+                }
+                best
+            },
+        };
+        best
     }
 }
 

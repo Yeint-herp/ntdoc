@@ -4,7 +4,7 @@ use std::{env, process, sync::Arc};
 
 use clipboard::{ClipboardContext, ClipboardProvider};
 use db::{database_parse, CategorizedEntry};
-use fuzzy_matcher::{FuzzyMatcher, skim::SkimMatcherV2};
+use fuzzy_matcher::skim::SkimMatcherV2;
 
 use cursive::Cursive;
 use cursive::CursiveExt;
@@ -52,16 +52,15 @@ fn direct_lookup(entries: &[CategorizedEntry], name: &str, raw: bool) {
     let matcher = SkimMatcherV2::default();
 
     let found = entries
-        .iter()
-        .filter_map(|e| matcher.fuzzy_match(e.name(), name).map(|score| (e, score)))
-        .max_by_key(|(_, score)| *score)
-        .or_else(|| {
-            entries
-                .iter()
-                .filter_map(|e| matcher.fuzzy_match(&e.name().to_lowercase(), &name.to_lowercase()).map(|score| (e, score)))
-                .max_by_key(|(_, score)| *score)
-        })
-        .map(|(e, _)| e);
+            .iter()
+            .filter_map(|e| {
+                e.fuzzy_score(name, &matcher)
+                .or_else(|| e.fuzzy_score_ci(name, &matcher))
+                .map(|score| (e, score))
+            })
+            .max_by_key(|&(_e, score)| score)
+            .map(|(e, _)| e);
+
 
     match found {
         Some(entry) if raw => {
@@ -145,19 +144,13 @@ fn update_results(
         all.sort_by_key(|(e, _)| e.name().to_string());
         all
     } else {
-        let mut case_sensitive: Vec<_> = entries
-            .iter()
-            .filter_map(|e| matcher.fuzzy_match(e.name(), query).map(|s| (e, s)))
-            .collect();
-        
-        if case_sensitive.is_empty() {
-            entries
-                .iter()
-                .filter_map(|e| matcher.fuzzy_match(&e.name().to_lowercase(), &query.to_lowercase()).map(|s| (e, s)))
+        entries.iter()
+                .filter_map(|e| {
+                    e.fuzzy_score(query, matcher)
+                    .or_else(|| e.fuzzy_score_ci(query, matcher))
+                    .map(|score| (e, score))
+                })
                 .collect()
-        } else {
-            case_sensitive
-        }
     };
 
     scored.sort_by(|a, b| b.1.cmp(&a.1));
